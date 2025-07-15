@@ -1,0 +1,23 @@
+from flask import Flask, request, jsonify
+import google.generativeai as genai
+import os
+
+app = Flask(__name__)
+
+# Configura tu API Key
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+@app.route("/preguntar", methods=["POST"])
+def preguntar():
+    data = request.get_json()
+    pregunta = data.get("pregunta", "")
+    try:
+        respuesta = model.generate_content(pregunta)
+        return jsonify({"respuesta": respuesta.text})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)

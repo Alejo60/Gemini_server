@@ -1,0 +1,4 @@
+gemini-server/
+├── app.py
+├── requirements.txt
+├── .env (opcional, para tu API Key)
